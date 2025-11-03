@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NA Step Questions 10x10 Grid</title>
+<style>
+body {
+font-family: Arial, sans-serif;
+display: flex;
+justify-content: center;
+align-items: center;
+min-height: 100vh;
+margin: 0;
+background-color: #f0f0f0;
+}
+#grid {
+display: grid;
+grid-template-columns: repeat(10, 80px);
+grid-gap: 8px;
+}
+.cell {
+background-color: #4caf50;
+color: white;
+font-weight: bold;
+display: flex;
+justify-content: center;
+align-items: center;
+height: 80px;
+cursor: pointer;
+border-radius: 6px;
+text-align: center;
+padding: 5px;
+}
+#question {
+display: none;
+max-width: 800px;
+text-align: left;
+background-color: white;
+padding: 30px;
+border-radius: 10px;
+box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+#question p {
+white-space: pre-wrap;
+}
+#backBtn {
+margin-top: 20px;
+padding: 10px 20px;
+background-color: #4caf50;
+color: white;
+font-weight: bold;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div id="grid"></div>
+
+<div id="question">
+<p id="questionText"></p>
+<button id="backBtn">Back to Grid</button>
+</div>
+
+<script>
+const questions = [
+"1. What did I try to control in my life that in reality controlled me? In what ways has that control caused pain to myself or others?",
+"2. How have I avoided taking responsibility for my actions? What consequences have I ignored or minimized?",
+"3. What is “unmanageability” in my life? How has it shown up in daily routines, relationships, or work?",
+"4. In what ways has my addiction disrupted my physical, emotional, or spiritual life?",
+"5. How have I denied the impact of my behaviors on others? What patterns keep repeating?",
+"6. When have I attempted to manage everything alone? What was the result?",
+"7. What fears prevent me from acknowledging my powerlessness? How do they influence my choices?",
+"8. How have my attempts to control people or situations backfired?",
+"9. Where do I notice chaos or unpredictability in my daily life? How do I react to it?",
+"10. What excuses have I made to avoid admitting my life is unmanageable?",
+"11. How do I define a 'Higher Power'? Is this concept helping me grow or limiting me?",
+"12. When have I experienced guidance or support beyond myself?",
+"13. What doubts do I have about believing in a Higher Power? How do they affect my actions?",
+"14. How does hope manifest in my life? In what situations have I lost hope?",
+"15. How do I ask for help when I need it? When do I refuse it, and why?",
+"16. How have I felt comforted or guided by something larger than myself?",
+"17. What does faith mean to me? How has it influenced past decisions?",
+"18. In what ways do I resist accepting help or guidance?",
+"19. How does belief in a Higher Power change my perspective on challenges?",
+"20. How could embracing hope and faith affect my recovery journey?",
+"21. What does 'surrender' mean to me? How does it feel emotionally and physically?",
+"22. Where do I cling to control, even when it harms me?",
+"23. How would my life change if I surrendered certain outcomes?",
+"24. What parts of myself are hardest to surrender, and why?",
+"25. How have I resisted change in the past? What lessons did I learn?",
+"26. When have I successfully let go of control? What was the outcome?",
+"27. How do I recognize when I’m forcing outcomes instead of surrendering?",
+"28. How does pride prevent me from surrendering?",
+"29. Who or what could help me practice surrender in my life?",
+"30. How do I distinguish between healthy effort and harmful control?",
+"31. What resentments do I hold? How have they affected my life?",
+"32. How have I harmed others through my actions or words?",
+"33. In what ways do I act selfishly, and what triggers it?",
+"34. What fears or insecurities drive my behaviors?",
+"35. How do I justify or rationalize my negative actions?",
+"36. What patterns of dishonesty appear in my life?",
+"37. Where do I need to accept responsibility for my actions?",
+"38. How have I blamed others for my problems?",
+"39. What character traits limit my growth?",
+"40. What strengths have I overlooked in myself due to fear or pride?",
+"41. What actions or behaviors am I most ashamed of?",
+"42. How have I shared my inventory with someone I trust?",
+"43. What truths have I avoided admitting to myself or others?",
+"44. How does admitting my wrongs affect my emotional state?",
+"45. Who have I hurt, and what would it mean to acknowledge it openly?",
+"46. What patterns emerge when I reflect honestly on my past?",
+"47. How does shame influence my current choices?",
+"48. What risks do I feel when being fully honest?",
+"49. How have I avoided confession, and why?",
+"50. How does admitting wrongs contribute to my recovery?",
+"51. What character defects do I see in myself?",
+"52. How willing am I to let go of these defects?",
+"53. How do defects interfere with my relationships?",
+"54. What fears prevent me from becoming ready for change?",
+"55. What steps can I take to prepare for transformation?",
+"56. When have I been resistant to change, and why?",
+"57. How do I define willingness in my daily life?",
+"58. In what areas am I fully ready to surrender myself to growth?",
+"59. How does readiness affect my spiritual or emotional health?",
+"60. What small actions demonstrate my willingness to change?",
+"61. How do I define humility? How does it appear in my life?",
+"62. In what situations do I struggle to ask for help?",
+"63. How have pride or ego interfered with my recovery?",
+"64. What fears arise when admitting weakness?",
+"65. How does humility help me maintain healthy relationships?",
+"66. Who can I trust to guide me through challenges?",
+"67. When have I let go of ego and gained peace or clarity?",
+"68. How do I differentiate between self-respect and stubborn pride?",
+"69. How does asking for help improve my recovery?",
+"70. What steps can I take daily to practice humility?",
+"71. Who have I harmed directly or indirectly?",
+"72. What amends feel most urgent?",
+"73. How do I feel about those I’ve harmed?",
+"74. What obstacles prevent me from making amends?",
+"75. How would making amends change my relationships?",
+"76. How can I take responsibility without expecting forgiveness?",
+"77. In what ways have I avoided acknowledging harm I’ve caused?",
+"78. How do I differentiate between real and imagined harms?",
+"79. What amends could improve my peace of mind?",
+"80. How do I prepare emotionally for making amends?",
+"81. How do I approach someone I’ve harmed to make amends?",
+"82. What fears arise when attempting an apology?",
+"83. How do I know if I am truly ready to make amends?",
+"84. How do I respond if my amends are rejected?",
+"85. How have past apologies gone well or poorly?",
+"86. How can I make amends without expecting anything in return?",
+"87. What steps can I take to ensure sincerity in my amends?",
+"88. How do I handle guilt or shame in the process?",
+"89. How do I reconcile my past actions with my present intentions?",
+"90. How can I maintain ongoing accountability after making amends?",
+"91. How do I review my actions daily?",
+"92. What triggers cause relapse or negative behavior?",
+"93. How do I correct mistakes as they happen?",
+"94. How do I maintain honesty in my self-assessment?",
+"95. How does continued inventory support long-term recovery?",
+"96. What practices help me connect with my Higher Power?",
+"97. How do meditation, prayer, or reflection affect my daily life?",
+"98. How do I notice spiritual guidance in ordinary situations?",
+"99. How can I carry the message of recovery to others?",
+"100. What service opportunities allow me to practice humility, honesty, and compassion?"
+];
+
+const grid = document.getElementById("grid");
+const questionDiv = document.getElementById("question");
+const questionText = document.getElementById("questionText");
+const backBtn = document.getElementById("backBtn");
+
+// Generate shuffled array of numbers 1–100
+const numbers = Array.from({length: 100}, (_, i) => i);
+for (let i = numbers.length - 1; i > 0; i--) {
+const j = Math.floor(Math.random() * (i + 1));
+[numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+}
+
+// Create grid with shuffled numbers
+numbers.forEach(n => {
+const cell = document.createElement("div");
+cell.className = "cell";
+cell.textContent = n + 1;
+cell.addEventListener("click", () => {
+grid.style.display = "none";
+questionText.textContent = questions[n];
+questionDiv.style.display = "block";
+});
+grid.appendChild(cell);
+});
+
+backBtn.addEventListener("click", () => {
+questionDiv.style.display = "none";
+grid.style.display = "grid";
+});
+</script>
+
+</body>
+</html>
